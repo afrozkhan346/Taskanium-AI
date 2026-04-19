@@ -48,22 +48,66 @@ type AppState =
 
 function Index() {
   const [state, setState] = useState<AppState>({ kind: "input" });
+  const [isBubble, setIsBubble] = useState(false);
+
+  const handleShrinkToBubble = () => {
+    setIsBubble(true);
+    // Shrink to 64×64 bubble
+    (window as Window & { taskanium?: { minimizeToBubble: () => void } }).taskanium?.minimizeToBubble();
+  };
+
+  const handleMaximize = () => {
+    setIsBubble(false);
+    // Expand back to 320x420 panel
+    (window as Window & { taskanium?: { expandToPanel: () => void } }).taskanium?.expandToPanel();
+  };
+
+  if (isBubble) {
+    return (
+      <button
+        onClick={handleMaximize}
+        style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties}
+        className="group relative flex h-dvh w-dvw cursor-pointer items-center justify-center overflow-hidden border-[3px] border-chassis-edge bg-chassis shadow-[inset_0_2px_4px_rgba(255,255,255,0.9),0_4px_12px_rgba(0,0,0,0.4)] transition-all hover:scale-[1.02] active:scale-95"
+        title="Click to Maximize"
+      >
+        {/* LED pulse indicator */}
+        <div className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full border border-black/20 bg-led-amber shadow-[0_0_8px_var(--led-amber)] led-pulse" />
+        
+        {/* Maximize Icon */}
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-muted-foreground transition-colors group-hover:text-primary">
+          <path d="M15 3h6v6"></path>
+          <path d="M9 21H3v-6"></path>
+          <path d="M21 3l-7 7"></path>
+          <path d="M3 21l7-7"></path>
+        </svg>
+      </button>
+    );
+  }
 
   return (
-    <main className="min-h-dvh px-6 py-12">
-      <header className="mx-auto mb-12 max-w-3xl text-center">
-        <div className="mb-3 inline-block rounded-sm border border-chassis-edge/50 bg-chassis px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.25em] text-muted-foreground shadow-[inset_0_1px_0_rgba(255,255,255,0.6)]">
-          AI HACKFEST · PROTOTYPE
-        </div>
-        <h1 className="font-mono text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
+    <main className="flex h-screen w-screen flex-col items-center overflow-hidden px-3 pt-10 pb-3">
+      {/* Draggable title-bar area with structured window controls */}
+      <div
+        style={{ WebkitAppRegion: "drag" } as React.CSSProperties}
+        className="fixed top-0 left-0 right-0 z-50 flex h-10 items-center justify-between px-3"
+      >
+        <div className="font-mono text-[10px] font-bold tracking-[0.2em] text-muted-foreground/80">
           TASKANIUM
-        </h1>
-        <p className="mx-auto mt-3 max-w-md text-sm text-muted-foreground">
-          One thing. One step. One nervous system that finally cooperates.
-        </p>
-      </header>
+        </div>
+        <div style={{ WebkitAppRegion: "no-drag" } as React.CSSProperties} className="flex gap-1.5 items-center bg-chassis-dark/50 backdrop-blur-sm p-1 rounded-full border border-chassis-edge/30">
+          {/* Shrink to Bubble (Single Minimize Button) */}
+          <button
+            onClick={handleShrinkToBubble}
+            title="Minimize"
+            className="flex size-5 items-center justify-center rounded-full bg-chassis transition-colors hover:bg-black/10 active:bg-black/20"
+          >
+            <span className="block h-0.5 w-2.5 bg-foreground/70" />
+          </button>
+        </div>
+      </div>
 
-      <section className="mx-auto flex max-w-5xl flex-col items-center justify-center gap-12 lg:flex-row lg:items-start lg:gap-16">
+
+      <section className="flex flex-1 w-full max-w-[290px] flex-col items-center justify-start overflow-hidden">
         {state.kind === "input" && (
           <TaskInput
             onStart={(task, energy, session) =>
@@ -95,10 +139,6 @@ function Index() {
           />
         )}
       </section>
-
-      <footer className="mt-20 text-center font-mono text-[10px] uppercase tracking-widest text-muted-foreground/60">
-        Taskanium · AI Hackfest 2026 · Powered by Gemini + ElevenLabs + Snowflake
-      </footer>
     </main>
   );
 }

@@ -40,8 +40,8 @@ export function TaskInput({ onStart }: TaskInputProps) {
   };
 
   return (
-    <Chassis label="MOD_01 // Task Matrix" version="v1.4" className="w-full max-w-[440px]">
-      <LcdScreen className="mb-6">
+    <Chassis size="sm" label="MOD_01 // Task Matrix" version="v1.4" className="w-full">
+      <LcdScreen className="mb-4">
         <textarea
           value={task}
           onChange={(e) => setTask(e.target.value)}
@@ -59,8 +59,8 @@ export function TaskInput({ onStart }: TaskInputProps) {
         <div className="cursor-blink mt-1 inline-block h-5 w-2.5 bg-lcd-text" />
       </LcdScreen>
 
-      <div className="mb-6">
-        <div className="mb-2 px-1 text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
+      <div className="mb-4">
+        <div className="mb-1.5 px-1 text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
           Energy Level
         </div>
         <div className="flex gap-2 rounded-md border border-chassis-edge/40 bg-chassis-dark/50 p-2 shadow-[inset_0_2px_4px_rgba(0,0,0,0.08)]">

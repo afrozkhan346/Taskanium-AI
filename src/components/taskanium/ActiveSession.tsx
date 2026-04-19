@@ -153,16 +153,16 @@ export function ActiveSession({
 
   return (
     <div className="relative">
-      <Chassis size="md" className="w-[340px]">
+      <Chassis size="sm" className="w-[300px]">
         {/* Top diagnostics */}
-        <div className="mb-5 flex items-start justify-between">
+        <div className="mb-3 flex items-start justify-between">
           <PhaseLeds phase={phase} />
           <EnergyBadge energy={energy} />
         </div>
 
         {/* Focus display — shows Gemini's first_step */}
         <DarkScreen
-          className="mb-5"
+          className="mb-3"
           topRight={timer.isHyperfocus ? "HYPERFOCUS" : timer.isDoomSpiral ? "DOOM_SPIRAL" : `T-${fmt(timer.secondsUntilReminder)}`}
         >
           <p className="mt-3 max-w-[26ch] text-pretty text-sm leading-relaxed">
@@ -181,7 +181,7 @@ export function ActiveSession({
         </DarkScreen>
 
         {/* Session info row */}
-        <div className="mb-4 flex items-center justify-between font-mono text-[9px] uppercase tracking-widest text-muted-foreground">
+        <div className="mb-3 flex items-center justify-between font-mono text-[9px] uppercase tracking-widest text-muted-foreground">
           <span>Est. {session.estimated_minutes} min</span>
           <span>{Math.round(timer.elapsedMinutes)}m elapsed</span>
           <span>Phase {timer.currentPhase + 1}/3</span>
@@ -215,7 +215,7 @@ export function ActiveSession({
         {/* Abandon */}
         <button
           onClick={handleAbandon}
-          className="mt-4 w-full font-mono text-[10px] uppercase tracking-widest text-muted-foreground/70 underline-offset-4 hover:text-muted-foreground hover:underline"
+          className="mt-3 w-full font-mono text-[10px] uppercase tracking-widest text-muted-foreground/70 underline-offset-4 hover:text-muted-foreground hover:underline"
         >
           Abort sequence
         </button>

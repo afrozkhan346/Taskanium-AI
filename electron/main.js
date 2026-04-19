@@ -107,6 +107,15 @@ ipcMain.on("expand-to-panel", () => {
 });
 
 /**
+ * Standard window minimize — hides widget to taskbar / bubble.
+ * Called by the minimize button in the React UI header.
+ */
+ipcMain.on("minimize-window", () => {
+  if (!win) return;
+  win.minimize();
+});
+
+/**
  * Open the DigitalOcean insights page in the system browser.
  * Judges can access this URL without installing the app.
  */

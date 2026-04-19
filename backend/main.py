@@ -12,7 +12,7 @@ from models import (
     EndSessionResponse,
     InsightsResponse,
 )
-from gemini_client import plan_session, generate_reminder_message
+from groq_client import plan_session, generate_reminder_message
 from elevenlabs_client import text_to_speech_base64
 from snowflake_client import (
     ensure_table_exists,
@@ -62,7 +62,7 @@ def start_session(req: StartSessionRequest):
     Full session planning flow:
     1. Fetch last 5 sessions from Snowflake
     2. Build context summary string
-    3. Call Gemini to plan the session
+    3. Call Groq to plan the session
     4. Create a new session row in Snowflake
     5. Return plan to frontend
     """
@@ -74,11 +74,11 @@ def start_session(req: StartSessionRequest):
         print(f"[start-session] Snowflake fetch failed (non-fatal): {e}")
         context = "No past session data available."
 
-    # Step 3 — Gemini session plan
+    # Step 3 — Groq session plan
     try:
         plan = plan_session(req.task_text, req.energy_level, context)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Gemini planning failed: {e}")
+        raise HTTPException(status_code=500, detail=f"Groq planning failed: {e}")
 
     # Step 4 — Create Snowflake row
     try:
@@ -105,11 +105,11 @@ def start_session(req: StartSessionRequest):
 def speak(req: SpeakRequest):
     """
     Reminder voice flow:
-    1. Gemini writes a fresh phase-aware spoken message
+    1. Groq writes a fresh phase-aware spoken message
     2. ElevenLabs converts it to MP3 audio
     3. Return base64 audio + message text to frontend
     """
-    # Step 1 — Gemini reminder message
+    # Step 1 — Groq reminder message
     try:
         message = generate_reminder_message(
             task_text=req.task_text,
@@ -119,7 +119,7 @@ def speak(req: SpeakRequest):
             is_doom_spiral=req.is_doom_spiral,
         )
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Gemini message failed: {e}")
+        raise HTTPException(status_code=500, detail=f"Groq message failed: {e}")
 
     # Step 2 — ElevenLabs TTS
     try:

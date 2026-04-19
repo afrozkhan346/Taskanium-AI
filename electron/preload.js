@@ -18,6 +18,9 @@ contextBridge.exposeInMainWorld("taskanium", {
   /** Restores window to 320×420 full panel */
   expandToPanel: () => ipcRenderer.send("expand-to-panel"),
 
+  /** Minimizes the window (hides to OS taskbar / bubble) */
+  minimizeWindow: () => ipcRenderer.send("minimize-window"),
+
   /** Opens the DigitalOcean insights page in the system browser */
   openInsights: () => ipcRenderer.send("open-insights"),
 });

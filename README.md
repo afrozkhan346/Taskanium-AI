@@ -10,18 +10,18 @@
 
 Taskanium is an always-on-top desktop widget that helps people with ADHD start and stay on tasks.
 
-- **One micro-step** — Gemini breaks your task into the smallest possible next action
+- **One micro-step** — Groq breaks your task into the smallest possible next action
 - **Body doubling** — ElevenLabs voice creates a calming working-alongside experience
 - **3-phase adaptive reminders** — More help at start, backs off when you're in flow
 - **Hyperfocus detection** — Goes completely silent when you're deep in work
 - **Doom spiral detection** — Escalates gently when you're stuck
-- **Session memory** — Snowflake stores past sessions; Gemini learns and improves
+- **Session memory** — Snowflake stores past sessions; Groq learns and improves
 
 ## Tech Stack
 
 | Layer         | Technology                        |
-|--------------|-----------------------------------|
-| AI Planning  | Google Gemini 1.5 Flash           |
+|---------------|-----------------------------------|
+| AI Planning   | Groq (Llama 3 70B)                |
 | Voice        | ElevenLabs (Rachel voice)         |
 | Database     | Snowflake                         |
 | Deployment   | App Platform         |
@@ -31,29 +31,29 @@ Taskanium is an always-on-top desktop widget that helps people with ADHD start a
 
 ## Setup
 
-### Backend
+### 1. Backend (Terminal 1)
 
 ```bash
 cd backend
 cp .env.example .env
-# Fill in your API keys in .env
+# Fill in your GROQ, ElevenLabs, and Snowflake keys in .env
 pip install -r requirements.txt
-uvicorn main:app --reload --port 8000
+python -m uvicorn main:app --reload --port 8000
 ```
 
-### Frontend
+### 2. Frontend / Vite (Terminal 2)
 
 ```bash
 npm install
 npm run dev
 ```
 
-### Electron (desktop widget)
+### 3. Electron App (Terminal 3)
 
 ```bash
 cd electron
 npm install
-npm start -- --dev
+npm run dev
 ```
 
 ## Environment Variables
