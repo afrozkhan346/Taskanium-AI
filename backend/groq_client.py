@@ -1,17 +1,23 @@
 import os
 import json
-import google.generativeai as genai
+from groq import Groq
 from dotenv import load_dotenv
 
 load_dotenv()
 
-genai.configure(api_key=os.environ["GEMINI_API_KEY"])
-_model = genai.GenerativeModel("gemini-2.0-flash")
+# Groq client will read GROQ_API_KEY from environment
+# If key is missing, it will raise an error on initialization or call
+try:
+    _client = Groq(api_key=os.environ.get("GROQ_API_KEY", ""))
+except Exception:
+    _client = None
+
+_model = "llama-3.3-70b-versatile"
 
 
 def plan_session(task_text: str, energy_level: str, past_context: str) -> dict:
     """
-    Calls Gemini to plan a focus session.
+    Calls Groq to plan a focus session.
 
     Returns a dict with:
         first_step            – one micro-action, under 12 words
@@ -20,13 +26,16 @@ def plan_session(task_text: str, energy_level: str, past_context: str) -> dict:
         base_interval_minutes – 5 (low) / 15 (medium) / 25 (high)
         opening_voice_text    – warm 1-sentence opener
     """
+    if not _client:
+        raise ValueError("GROQ_API_KEY is not set or invalid.")
+
     prompt = f"""You are Taskanium, an AI assistant designed specifically for ADHD brains.
 
 Task: {task_text}
 Energy level: {energy_level} (low / medium / high)
 Past sessions: {past_context}
 
-Return ONLY valid JSON, no markdown:
+Return ONLY valid JSON matching this schema exactly:
 {{
   "first_step": "One action under 12 words. Low energy = tiny (just open the file). High energy = real chunk.",
   "estimated_minutes": <realistic integer>,
@@ -41,16 +50,13 @@ Rules:
 - Low energy = acknowledge that starting IS the win
 - Adjust estimates based on past session history if provided"""
 
-    response = _model.generate_content(prompt)
-    raw = response.text.strip()
-
-    # Strip markdown fences if Gemini wraps in ```json ... ```
-    if raw.startswith("```"):
-        parts = raw.split("```")
-        raw = parts[1]
-        if raw.startswith("json"):
-            raw = raw[4:]
-
+    response = _client.chat.completions.create(
+        model=_model,
+        messages=[{"role": "user", "content": prompt}],
+        response_format={"type": "json_object"},
+        temperature=0.5
+    )
+    raw = response.choices[0].message.content
     return json.loads(raw.strip())
 
 
@@ -62,11 +68,14 @@ def generate_reminder_message(
     is_doom_spiral: bool,
 ) -> str:
     """
-    Calls Gemini to generate a fresh spoken reminder message.
+    Calls Groq to generate a fresh spoken reminder message.
 
     Returns a single string — the exact words ElevenLabs will speak.
     Never hardcoded, never repeated, never judgmental.
     """
+    if not _client:
+        raise ValueError("GROQ_API_KEY is not set or invalid.")
+
     phase_labels = {0: "Start", 1: "Mid", 2: "End"}
     phase_tones = {
         0: "Warm and encouraging — they are still getting started.",
@@ -97,5 +106,9 @@ Write ONE short spoken sentence (10–20 words). Rules:
 
 Return ONLY the sentence. No quotes. No explanation."""
 
-    response = _model.generate_content(prompt)
-    return response.text.strip().strip('"').strip("'")
+    response = _client.chat.completions.create(
+        model=_model,
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.7
+    )
+    return response.choices[0].message.content.strip().strip('"').strip("'")

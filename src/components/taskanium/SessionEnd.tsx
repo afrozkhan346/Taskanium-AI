@@ -39,11 +39,12 @@ export function SessionEnd({ task, outcome, stats, onReset }: SessionEndProps) {
 
   return (
     <Chassis
+      size="sm"
       label={done ? "MOD_03 // Sequence Complete" : "MOD_03 // Sequence Aborted"}
       version="v1.4"
-      className="w-full max-w-[420px]"
+      className="w-[300px]"
     >
-      <DarkScreen className="mb-6" topRight={done ? "STATUS_OK" : "STATUS_HALT"}>
+      <DarkScreen className="mb-4" topRight={done ? "STATUS_OK" : "STATUS_HALT"}>
         <div className="space-y-2 py-2">
           <p className="font-mono text-xs uppercase tracking-widest text-zinc-500">
             {done ? "Task logged" : "Task halted"}
