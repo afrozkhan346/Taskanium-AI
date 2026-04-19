@@ -2,7 +2,6 @@
 
 > An AI focus companion built specifically for ADHD brains.
 
-**Live Insights:** [Demo Insights Page](#)
 **Hackathon:** MLH AI Hackfest 2026 — April 2026
 
 ---
