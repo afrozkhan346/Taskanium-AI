@@ -1,0 +1,185 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Tactile Synthesizer tokens */
+  --color-chassis: var(--chassis);
+  --color-chassis-dark: var(--chassis-dark);
+  --color-chassis-edge: var(--chassis-edge);
+  --color-lcd-bg: var(--lcd-bg);
+  --color-lcd-text: var(--lcd-text);
+  --color-lcd-edge: var(--lcd-edge);
+  --color-led-green: var(--led-green);
+  --color-led-amber: var(--led-amber);
+  --color-led-red: var(--led-red);
+  --color-led-off: var(--led-off);
+  --color-screen-dark: var(--screen-dark);
+  --color-screen-text: var(--screen-text);
+  --color-btn-orange: var(--btn-orange);
+  --color-btn-orange-edge: var(--btn-orange-edge);
+  --color-btn-red: var(--btn-red);
+  --color-btn-red-edge: var(--btn-red-edge);
+  --color-btn-green: var(--btn-green);
+  --color-btn-green-edge: var(--btn-green-edge);
+  --color-label-yellow: var(--label-yellow);
+  --color-label-yellow-edge: var(--label-yellow-edge);
+  --color-label-yellow-text: var(--label-yellow-text);
+
+  --font-sans: "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: "Space Mono", ui-monospace, monospace;
+
+  --shadow-button-orange: 0 8px 0 0 var(--btn-orange-edge), 0 12px 12px rgba(0,0,0,0.2);
+  --shadow-button-orange-pressed: 0 0 0 0 var(--btn-orange-edge);
+  --shadow-button-red: 0 6px 0 0 var(--btn-red-edge), 0 8px 8px rgba(0,0,0,0.15);
+  --shadow-button-green: 0 6px 0 0 var(--btn-green-edge), 0 8px 8px rgba(0,0,0,0.15);
+  --shadow-chassis: 0 16px 32px -12px rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.05), inset 0 2px 4px rgba(255,255,255,0.8);
+  --shadow-chassis-lg: 0 24px 48px -12px rgba(0,0,0,0.3), 0 0 0 1px rgba(0,0,0,0.05), inset 0 2px 4px rgba(255,255,255,0.8);
+  --shadow-lcd-inset: inset 0 6px 12px rgba(0,0,0,0.25);
+  --shadow-screen-inset: inset 0 4px 12px rgba(0,0,0,0.8);
+  --shadow-led-green: 0 0 10px var(--led-green), inset 0 1px 2px rgba(255,255,255,0.6);
+  --shadow-led-amber: 0 0 8px var(--led-amber);
+  --shadow-led-red: 0 0 10px var(--led-red);
+}
+
+:root {
+  --radius: 0.5rem;
+
+  /* Map shadcn semantic tokens to synthesizer palette */
+  --background: oklch(0.96 0.003 80);
+  --foreground: oklch(0.2 0.01 60);
+  --card: oklch(0.92 0.005 70);
+  --card-foreground: oklch(0.2 0.01 60);
+  --popover: oklch(0.92 0.005 70);
+  --popover-foreground: oklch(0.2 0.01 60);
+  --primary: oklch(0.68 0.2 40);
+  --primary-foreground: oklch(0.98 0.01 60);
+  --secondary: oklch(0.85 0.005 70);
+  --secondary-foreground: oklch(0.25 0.01 60);
+  --muted: oklch(0.88 0.005 70);
+  --muted-foreground: oklch(0.45 0.01 60);
+  --accent: oklch(0.85 0.005 70);
+  --accent-foreground: oklch(0.25 0.01 60);
+  --destructive: oklch(0.62 0.22 25);
+  --destructive-foreground: oklch(0.98 0.01 60);
+  --border: oklch(0.78 0.005 70);
+  --input: oklch(0.85 0.005 70);
+  --ring: oklch(0.68 0.2 40);
+
+  /* Synthesizer palette (hex via color()) */
+  --chassis: #e6e4df;
+  --chassis-dark: #d5d3cd;
+  --chassis-edge: #a1a1aa;
+  --lcd-bg: #9ba693;
+  --lcd-text: #232c1e;
+  --lcd-edge: #6b7264;
+  --led-green: #10b981;
+  --led-amber: #f59e0b;
+  --led-red: #ef4444;
+  --led-off: #71717a;
+  --screen-dark: #1c1917;
+  --screen-text: #f5f5f4;
+  --btn-orange: #f97316;
+  --btn-orange-edge: #c2410c;
+  --btn-red: #ef4444;
+  --btn-red-edge: #b91c1c;
+  --btn-green: #10b981;
+  --btn-green-edge: #047857;
+  --label-yellow: #fcd34d;
+  --label-yellow-edge: #d97706;
+  --label-yellow-text: #92400e;
+}
+
+.dark {
+  --background: oklch(0.18 0.01 60);
+  --foreground: oklch(0.96 0.003 80);
+  --card: oklch(0.22 0.01 60);
+  --card-foreground: oklch(0.96 0.003 80);
+  --popover: oklch(0.22 0.01 60);
+  --popover-foreground: oklch(0.96 0.003 80);
+  --primary: oklch(0.68 0.2 40);
+  --primary-foreground: oklch(0.18 0.01 60);
+  --secondary: oklch(0.28 0.01 60);
+  --secondary-foreground: oklch(0.96 0.003 80);
+  --muted: oklch(0.28 0.01 60);
+  --muted-foreground: oklch(0.7 0.01 60);
+  --accent: oklch(0.28 0.01 60);
+  --accent-foreground: oklch(0.96 0.003 80);
+  --destructive: oklch(0.62 0.22 25);
+  --destructive-foreground: oklch(0.98 0.01 60);
+  --border: oklch(0.3 0.01 60);
+  --input: oklch(0.3 0.01 60);
+  --ring: oklch(0.68 0.2 40);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html, body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    background-image: radial-gradient(#d4d4d8 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+}
+
+@layer utilities {
+  .lcd-scanlines {
+    background-image: linear-gradient(rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.05) 50%);
+    background-size: 100% 4px;
+  }
+  .label-stripes {
+    background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+    background-size: 4px 100%;
+  }
+  .led-pulse {
+    animation: led-pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes led-pulse {
+    0%, 100% { opacity: 1; filter: brightness(1); }
+    50% { opacity: 0.85; filter: brightness(1.15); }
+  }
+  .cursor-blink {
+    animation: cursor-blink 1s steps(2) infinite;
+  }
+  @keyframes cursor-blink {
+    50% { opacity: 0; }
+  }
+  .toast-in {
+    animation: toast-in 0.4s ease-out;
+  }
+  @keyframes toast-in {
+    from { opacity: 0; transform: translateY(8px) rotate(-3deg); }
+    to { opacity: 1; transform: translateY(0) rotate(-3deg); }
+  }
+}
